@@ -31,6 +31,10 @@ const redisStore = new RedisStore({
     ttl: 86400 // 24 hours
 });
 
+app.get('/', (req, res) => {
+    res.send("hii")
+})
+
 // Session configuration with Redis
 app.use(session({
     store: redisStore,
