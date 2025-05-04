@@ -14,7 +14,7 @@ const AdminLogin = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('/admin/login', { username, password });
+            const response = await axios.post(`${process.env.REACT_APP_BACKENDURL}/admin/login`, { username, password });
             console.log(response);
             if (response.data.message === "Login successful") {
                 Cookies.set('admin', "admin");
