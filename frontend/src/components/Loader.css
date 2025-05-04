@@ -1,0 +1,136 @@
+.loader {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loader__bar {
+  position: absolute;
+  bottom: 0;
+  width: 12px;
+  height: 50%;
+  background: linear-gradient(to top, #667eea, #764ba2);
+  transform-origin: center bottom;
+  box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+  border-radius: 6px;
+}
+
+.loader__bar:nth-child(1) {
+  left: 0px;
+  transform: scale(1, 0.2);
+  animation: barUp1 2s infinite ease-in-out;
+}
+
+.loader__bar:nth-child(2) {
+  left: 20px;
+  transform: scale(1, 0.4);
+  animation: barUp2 2s infinite ease-in-out;
+}
+
+.loader__bar:nth-child(3) {
+  left: 40px;
+  transform: scale(1, 0.6);
+  animation: barUp3 2s infinite ease-in-out;
+}
+
+.loader__bar:nth-child(4) {
+  left: 60px;
+  transform: scale(1, 0.8);
+  animation: barUp4 2s infinite ease-in-out;
+}
+
+.loader__bar:nth-child(5) {
+  left: 80px;
+  transform: scale(1, 1);
+  animation: barUp5 2s infinite ease-in-out;
+}
+
+.loader__ball {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  width: 12px;
+  height: 12px;
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+  animation: ballMove 2s infinite ease-in-out;
+}
+
+@keyframes ballMove {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(88px, -30px);
+  }
+  50% {
+    transform: translate(88px, 0);
+  }
+  75% {
+    transform: translate(0, -30px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes barUp1 {
+  0%, 100% {
+    transform: scale(1, 0.2);
+  }
+  50% {
+    transform: scale(1, 1);
+  }
+}
+
+@keyframes barUp2 {
+  0%, 100% {
+    transform: scale(1, 0.4);
+  }
+  50% {
+    transform: scale(1, 0.8);
+  }
+}
+
+@keyframes barUp3 {
+  0%, 100% {
+    transform: scale(1, 0.6);
+  }
+  50% {
+    transform: scale(1, 1);
+  }
+}
+
+@keyframes barUp4 {
+  0%, 100% {
+    transform: scale(1, 0.8);
+  }
+  50% {
+    transform: scale(1, 0.6);
+  }
+}
+
+@keyframes barUp5 {
+  0%, 100% {
+    transform: scale(1, 1);
+  }
+  50% {
+    transform: scale(1, 0.4);
+  }
+}
+
+/* Add a container for better centering */
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
