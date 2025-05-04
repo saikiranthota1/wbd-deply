@@ -55,7 +55,7 @@ export default function StartupDetails({ kyc, progress }) {
             <div className="flex items-center space-x-3 pb-3">
               <div className="w-20 h-20 rounded-full overflow-hidden shadow-sm">
                 <img 
-                  src={`${process.env.REACT_APP_BACKENDURL}/uploads/profiles/${kyc.profile_picture}`} 
+                  src={`${kyc.profile_picture}`} 
                   alt={kyc.company_name}
                   className="w-full h-full object-cover"
                 />
