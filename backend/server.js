@@ -21,6 +21,16 @@ dotenv.config();
 
 app.use(express.json());
 
+// Configure CORS
+const corsOptions = {
+  origin: ['https://wbd-deply.vercel.app', 'http://localhost:3000'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+};
+
+app.use(cors(corsOptions));
+
 // Connect to MongoDB
 mongoose.connect("mongodb+srv://saikirant375:bQMs8NOf5Wf16CU9@cluster0.t00cl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0" || "mongodb://127.0.0.1:27017/");
 
@@ -50,14 +60,14 @@ app.use(session({
 // Socket.IO setup
 const io = new Server(server, {
     cors: {
-        origin: "http://localhost:3000",
+        origin: ['https://wbd-deply.vercel.app', 'http://localhost:3000'],
         methods: ["GET", "POST"],
+        credentials: true
     },
 });
 
 // Middleware
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.use(cors());
 
 // Swagger Documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
