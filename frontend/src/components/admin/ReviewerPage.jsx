@@ -54,7 +54,7 @@ export default function EIRReviewerSelection({ params }) {
   const submitReviewerData = async (requestId) => {
     try {
       setLoading(true);
-      const response = await fetch(`/admin/eir/selectreviewer/${id}`, {
+      const response = await fetch(`${process.env.REACT_APP_BACKENDURL}/admin/eir/selectreviewer/${id}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(selectedReviewers),
