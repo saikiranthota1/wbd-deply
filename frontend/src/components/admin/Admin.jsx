@@ -24,21 +24,21 @@ export default function Admin() {
   const [visibleDetails, setVisibleDetails] = useState(null)
 
   useEffect(() => {
-    fetch('admin/startups')
+    fetch(`${process.env.REACT_APP_BACKENDURL}/admin/startups`)
       .then((response) => response.json())
       .then((data) => setStartups(data))
       .catch((error) => console.error('Error fetching startups:', error))
   }, [])
   const navigate = useNavigate()
   useEffect(() => {
-    fetch('admin/eir-requests')
+    fetch(`${process.env.REACT_APP_BACKENDURL}/admin/eir-requests`)
       .then((response) => response.json())
       .then((data) => setEirRequests(data))
       .catch((error) => console.error('Error fetching EIR requests:', error))
   }, [])
 
   useEffect(() => {
-    fetch('admin/grant-requests')
+    fetch(`${process.env.REACT_APP_BACKENDURL}/admin/grant-requests`)
       .then((response) => response.json())
       .then((data) => setGrantRequests(data.reverse()))
       .catch((error) => console.error('Error fetching grant requests:', error))

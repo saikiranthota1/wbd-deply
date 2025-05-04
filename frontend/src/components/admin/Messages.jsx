@@ -19,7 +19,7 @@ export default function StartupMessages() {
   useEffect(() => {
     const fetchStartups = async () => {
       try {
-        const response = await axios.get('/admin/startups')
+        const response = await axios.get(`${process.env.REACT_APP_BACKENDURL}/admin/startups`)
         setStartups(response.data)
       } catch (error) {
         console.error('Error fetching startups:', error)
@@ -56,7 +56,7 @@ export default function StartupMessages() {
     socket.emit('joinRoom', startupId)
     
     try {
-      const response = await axios.get(`/admin/messages/${startupId}`)
+      const response = await axios.get(`${process.env.REACT_APP_BACKENDURL} /admin/messages/${startupId}`)
       setMessages(response.data.messsages || [])
       setUnreadMessages((prev) => ({ ...prev, [startupId]: 0 }))
     } catch (error) {

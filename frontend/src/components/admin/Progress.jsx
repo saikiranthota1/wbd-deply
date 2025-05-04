@@ -34,7 +34,7 @@ export default function EnhancedStartupProgress() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`/get/progress/${startup}`); // Use the appropriate startup ID here
+        const response = await fetch(`${process.env.REACT_APP_BACKENDURL}/get/progress/${startup}`); // Use the appropriate startup ID here
         const result = await response.json();
         console.log(result); // Log the result for debugging
         setData(result); // Set the fetched data into state

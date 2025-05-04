@@ -41,7 +41,7 @@ const EIRRequests = ({ eirRequests }) => {
   const handleRequestUpdate = async (actionType, requestId) => {
     setLoading(true);
     try {
-      const apiEndpoint = `/admin/eir/update-status`;
+      const apiEndpoint = `${process.env.REACT_APP_BACKENDURL}/admin/eir/update-status`;
       const response = await fetch(apiEndpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
