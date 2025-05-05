@@ -236,16 +236,6 @@ export default function Component() {
                     )
                   ))}
                   </div>
-                  <div className="space-y-2">
-                    <label htmlFor="profile_pic" className="block text-sm font-medium text-[#424242]">Profile Picture</label>
-                    <input
-                      id="profile_pic"
-                      type="file"
-                      className="mt-1 block w-full px-4 py-3 bg-[#F5F5F5] border border-[#48CFCB] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#229799] focus:border-transparent text-[#424242] placeholder-[#424242]"
-                      onChange={(e) => setKycDetails({ ...kycDetails, profile_pic: e.target.files[0] })}
-                      required
-                    />
-                  </div>
                   <button
                     className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-[#229799] hover:bg-[#48CFCB] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#48CFCB] transition-colors duration-200"
                     type="submit"
