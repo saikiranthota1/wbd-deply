@@ -95,7 +95,7 @@ router.post('/kyc', async (req, res) => {
         res.status(200).json({ message: 'KYC details submitted successfully', startup: savedKYC._id });
     } catch (error) {
         console.log(error);
-        res.status(500).json({ error: 'Failed to submit KYC details' });
+        res.status(500).json({ error: 'Failed to submit KYC details', erroris: error });
     }
 });
 
