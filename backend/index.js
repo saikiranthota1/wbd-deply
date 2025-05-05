@@ -32,8 +32,9 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 // Connect to MongoDB
-mongoose.connect("mongodb+srv://saikirant375:bQMs8NOf5Wf16CU9@cluster0.t00cl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0" || "mongodb://127.0.0.1:27017/");
-
+mongoose.connect("mongodb+srv://koushik:koushik@cluster0.h2lzgvs.mongodb.net/saiwbd").then(()=>{
+  console.log("MongoDB Connected ")
+});
 // Configure Redis session store
 const redisStore = new RedisStore({
     client: redisClient.client,
