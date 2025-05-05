@@ -1,25 +1,33 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const reviewschema = mongoose.Schema({
-    name:{
-        type:String,
-        required:true
-    },
-    email:{
-        type:String,
-        required:true
-    },
-    password:{
-        type:String,
-        required:true
-    },
-    organization:String,
-    about:String,
-    reviews:[{id:String}],    
-    grantsreviews:[{id:String}],    
-    scaleup:[{id:String}]    
-})
+  name: {
+    type: String,
+    index: true // Helpful if you need to search/filter by name
+  },
+  email: {
+    type: String,
+    unique: true, // Ensures no duplicate emails
+    index: true // Speeds up login/lookup by email
+  },
+  password: {
+    type: String
+  },
+  organization: {
+    type: String,
+    index: true // If you search reviewers by organization
+  },
+  about: String,
+  
+  // Reference fields – not indexed unless queried directly
+  reviews: [{ id: String }],
+  grantsreviews: [{ id: String }],
+  scaleup: [{ id: String }]
+});
 
-const Review = mongoose.model('Reviewers', reviewschema)
+// Optional: compound index example if needed
+// reviewschema.index({ email: 1, organization: 1 });
 
-module.exports = Review
+const Review = mongoose.model('Reviewers', reviewschema);
+
+module.exports = Review;

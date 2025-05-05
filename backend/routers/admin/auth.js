@@ -353,21 +353,13 @@ router.post('/grant/accept', async (req, res) => {
         }
       },
       { new: true } // Return the updated document
-    );
+    );  
 
     if (!updatedGrant) {
       return res.status(404).json({ error: 'Grant request not found' });
     }
-    const mailOptions = {
-      from: senderemail,
-      to: updatedGrant.applicant.contact_details.email,
-      subject: 'Acceptance OF Grant Request',
-      html: `
-       <h1> Congrats your grant request has been accepted</h1>
-      `
-  };
-  // Send the verification email
 
+  // Send the verification email
     console.log('Accept request called');
     res.status(200).json({ message: 'Grant request accepted successfully', updatedGrant });
   } catch (error) {

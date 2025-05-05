@@ -2,42 +2,63 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const GrantSchemeSchema = new Schema({
-  startup_id: String,          // Startup ID for identification
+  startup_id: {
+    type: String,
+    index: true // Querying grants by startup
+  },
   applicant: {
-    name: { type: String, required: true },                      // Name of the applicant or organization
+    name: { type: String },
     organization: { type: String },
-    org_pan:String,                              // Name of the organization (if applicable)
-    contact_details: {                                           
-      email: { type: String, required: true },                   // Applicant's email
-      phone: { type: String },                                   // Applicant's phone number
-      address: { type: String }                                  // Applicant's address
+    org_pan: String,
+    contact_details: {
+      email: {
+        type: String,
+        index: true // Useful for querying by email
+      },
+      phone: { type: String },
+      address: { type: String }
     }
   },
   project_proposal: {
-    project_title: { type: String, required: true },             // Title of the project
-    description: { type: String, required: true },               // Detailed description of the project
-    objectives: [{ type: String }],                              // List of objectives
+    project_title: { type: String},
+    description: { type: String},
+    objectives: [{ type: String }],
     budget: {
-      total_funding_required: { type: Number, required: true },  // Total amount of funding needed
-      funding_breakdown: [{                                      // Breakdown of how the funding will be used
+      total_funding_required: { type: Number },
+      funding_breakdown: [{
         item: { type: String },
         amount: { type: Number }
       }]
     }
   },
   grant_status: {
-    status: { type: String, enum: ['Submitted', 'Approved', 'Rejected', 'Short Listed', 'Under Review'], default: 'Submitted' }, // Status of the grant
-    decision_date: { type: Date }                                // Date of the grant decision
+    status: {
+      type: String,
+      enum: ['Submitted', 'Approved', 'Rejected', 'Short Listed', 'Under Review'],
+      default: 'Submitted',
+      index: true // Used for filtering application progress
+    },
+    decision_date: {
+      type: Date,
+      index: true // Useful for sorting/filtering by decision timeline
+    }
   },
-  reviews:[{
-    reviewer_id: { type: String},
+  reviews: [{
+    reviewer_id: { type: String },
     reviewer_name: { type: String },
-    reviewer_name_type: { type: String},
+    reviewer_name_type: { type: String },
     review_date: { type: Date },
     rating: { type: Number },
-    comments: [{ type: String }]    
+    comments: [{ type: String }]
   }],
-  created_at: { type: Date, default: Date.now }                  // Date when the grant application was created
+  created_at: {
+    type: Date,
+    default: Date.now,
+    index: true // Enables sorting by submission date
+  }
 });
+
+// Optional: compound index for combined queries
+// GrantSchemeSchema.index({ "applicant.contact_details.email": 1, "grant_status.status": 1 });
 
 module.exports = mongoose.model('GrantScheme', GrantSchemeSchema);
