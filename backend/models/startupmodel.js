@@ -3,12 +3,12 @@ const Schema = mongoose.Schema;
 
 // KYC Schema for Startups
 const StartupKYCSchema = new Schema({
-  company_name: { type: String, required: true },
-  address: { type: String, required: true },
+  company_name: { type: String },
+  address: { type: String },
   contact_person: {
-    name: { type: String, required: true },
-    email: { type: String, required: true },
-    phone: { type: String, required: true },
+    name: { type: String },
+    email: { type: String },
+    phone: { type: String },
   },
   company_details: {
     incorporation_date: { type: Date },
@@ -42,7 +42,7 @@ const ReportSchema = new Schema({
 
 // Messaging/Notification Schema
 const MessageSchema = new Schema({
-  message: { type: String, required: true },
+  message: { type: String },
   date_sent: { type: Date, default: Date.now },
   recipient: { type: String}
 });
