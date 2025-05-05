@@ -19,6 +19,8 @@ const redisClient = require('./config/redis');
 
 dotenv.config();
 
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 app.use(express.json());
 
 // Configure CORS
@@ -71,7 +73,6 @@ const io = new Server(server, {
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Swagger Documentation
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
 app.get('/', (req, res) => {res.send("hii")})
 // 404 Not Found Handler

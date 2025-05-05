@@ -54,7 +54,7 @@ export default function GrantsReviewerSelection({ params }) {
   const submitReviewerData = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${process.env.REACT_APP_BACKENDURL}/grant/selectreviewer/${id}`, {
+      const response = await fetch(`${process.env.REACT_APP_BACKENDURL}/admin/grant/selectreviewer/${id}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(selectedReviewers),

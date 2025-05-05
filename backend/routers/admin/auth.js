@@ -9,13 +9,7 @@ var nodemailer = require('nodemailer');
 
 
 const senderemail = "hexart637@gmail.com";
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: senderemail,
-        pass: 'zetk dsdm imvx keoa'
-    }
-});
+
 
 // User login
 router.post('/login', async (req, res) => {
@@ -235,14 +229,7 @@ router.post('/grant/progress', async (req, res) => {
        <h1> Congrats your grand request has been taken into consideration and we will update the futher details shortly via mail</h1>
       `
   };
-  // Send the verification email
-  transporter.sendMail(mailOptions, function (error, info) {
-      if (error) {
-          console.log(error);
-      } else {
-          console.log("Mail sent successfully to receiver");
-      }
-  });
+
     res.status(200).json({ message: 'Grant request marked as In Progress', updatedGrant });
   } catch (error) {
     console.error('Error marking grant request as In Progress:', error);
@@ -278,14 +265,7 @@ router.post('/grant/reject', async (req, res) => {
        <h1>We Regret To infrom you that your grand request has been declined</h1>
       `
   };
-  // Send the verification email
-  transporter.sendMail(mailOptions, function (error, info) {
-      if (error) {
-          console.log(error);
-      } else {
-          console.log("Mail sent successfully to receiver");
-      }
-  });
+
     res.status(200).json({ message: 'Grant request rejected successfully', updatedGrant });
   } catch (error) {
     console.error('Error rejecting grant request:', error);
@@ -387,13 +367,7 @@ router.post('/grant/accept', async (req, res) => {
       `
   };
   // Send the verification email
-  transporter.sendMail(mailOptions, function (error, info) {
-      if (error) {
-          console.log(error);
-      } else {
-          console.log("Mail sent successfully to receiver");
-      }
-  });
+
     console.log('Accept request called');
     res.status(200).json({ message: 'Grant request accepted successfully', updatedGrant });
   } catch (error) {

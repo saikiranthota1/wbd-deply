@@ -42,13 +42,6 @@ router.post('/register', async (req, res) => {
 
         await newUser.save();
 
-        const mailOptions = {
-            from: senderemail,
-            to: email,
-            subject: 'startX',
-            html: `<h1>Thanks for Registering your startup in our website</h1>`
-        };
-
         res.status(200).json({
             message: 'Registration successful!',
             userId: newUser._id,
