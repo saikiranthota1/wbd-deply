@@ -11,8 +11,8 @@ const options = {
     },
     servers: [
       {
-        url: process.env.RENDER_EXTERNAL_URL || 'http://localhost:4000',
-        description: process.env.RENDER_EXTERNAL_URL ? 'Production server' : 'Development server',
+        url:  'https://wbd-deply-8kc9-k2xvz5jyl-saikiranthota1s-projects.vercel.app' || 'http://localhost:4000',
+        description: 'Development server',
       },
     ],
     components: {
