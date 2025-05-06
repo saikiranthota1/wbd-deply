@@ -36,9 +36,8 @@ const swaggerConfig = {
   swaggerOptions: {
     persistAuthorization: true,
   },
-  customCssUrl: '/swagger-ui.css',
-  customJs: '/swagger-ui-bundle.js',
-  customfavIcon: '/favicon-32x32.png'
+  customCss: '.swagger-ui .topbar { display: none }',
+  customSiteTitle: "Startup Platform API Documentation"
 };
 
 module.exports = {

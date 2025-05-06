@@ -20,12 +20,11 @@ dotenv.config();
 
 app.use('/api-docs', express.static(path.join(__dirname, 'node_modules/swagger-ui-dist/')));
 
-// Setup Swagger UI
-app.use(
-  '/api-docs',
-  swaggerUi.serve,
-  swaggerUi.setup(specs, swaggerConfig)
-);
+// Setup Swagger UI with explicit headers
+app.use('/api-docs', (req, res, next) => {
+  res.setHeader('Content-Type', 'text/html');
+  next();
+}, swaggerUi.serve, swaggerUi.setup(specs, swaggerConfig));
 
 // Add CORS headers for Swagger UI
 app.use((req, res, next) => {
