@@ -1,10 +1,14 @@
-const Redis = require('redis');
-const { promisify } = require('util');
+const { createClient } = require('redis');
 
 class RedisClient {
     constructor() {
-        this.client = Redis.createClient({
-            url: process.env.REDIS_URL || 'redis://localhost:6379'
+        this.client = createClient({
+            username: 'default',
+            password: '64chugMqAEM48LGChE8u5cecyn0mrDG2',
+            socket: {
+                host: 'redis-11788.c56.east-us.azure.redns.redis-cloud.com',
+                port: 11788
+            }
         });
 
         this.client.on('error', (err) => {
@@ -14,53 +18,38 @@ class RedisClient {
         this.client.on('connect', () => {
             console.log('Connected to Redis');
         });
+    }
 
-        // Promisify Redis methods
-        this.getAsync = promisify(this.client.get).bind(this.client);
-        this.setAsync = promisify(this.client.set).bind(this.client);
-        this.delAsync = promisify(this.client.del).bind(this.client);
-        this.existsAsync = promisify(this.client.exists).bind(this.client);
+    async connect() {
+        try {
+            await this.client.connect();
+            return true;
+        } catch (error) {
+            console.error('Redis Connection Error:', error);
+            return false;
+        }
     }
 
     async get(key) {
         try {
-            const data = await this.getAsync(key);
-            return data ? JSON.parse(data) : null;
+            const value = await this.client.get(key);
+            return value ? JSON.parse(value) : null;
         } catch (error) {
             console.error('Redis GET Error:', error);
             return null;
         }
     }
 
-    async set(key, value, expireTime = 3600) { // Default expiry: 1 hour
+    async set(key, value, expireTime = 3600) {
         try {
             const stringValue = JSON.stringify(value);
-            await this.setAsync(key, stringValue, 'EX', expireTime);
+            await this.client.set(key, stringValue, { EX: expireTime });
             return true;
         } catch (error) {
             console.error('Redis SET Error:', error);
             return false;
         }
     }
-
-    async delete(key) {
-        try {
-            await this.delAsync(key);
-            return true;
-        } catch (error) {
-            console.error('Redis DELETE Error:', error);
-            return false;
-        }
-    }
-
-    async exists(key) {
-        try {
-            return await this.existsAsync(key);
-        } catch (error) {
-            console.error('Redis EXISTS Error:', error);
-            return false;
-        }
-    }
 }
 
-module.exports = new RedisClient(); 
+module.exports = new RedisClient();

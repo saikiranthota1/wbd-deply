@@ -5,33 +5,7 @@ const StartupModel = require("../../models/startupmodel");
 const EIR = require("../../models/EirSchema");  // Assuming you named your EIR model file as eirmodel.js
 const GrantScheme = require("../../models/GrandSchemeSchema"); // Assuming you named your Grant model file as grantschememodel.js
 
-/**
- * @swagger
- * /user/profile:
- *   get:
- *     summary: Get user profile
- *     tags: [User]
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: User profile retrieved successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 username:
- *                   type: string
- *                 email:
- *                   type: string
- *                 profile_pic:
- *                   type: string
- *       401:
- *         description: Unauthorized
- *       500:
- *         description: Server error
- */
+
 router.get("/home/:user/:startup", async function (req, res) {
   try {
     // Find user
@@ -78,18 +52,60 @@ router.get("/home/:user/:startup", async function (req, res) {
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - userId
+ *               - username
  *             properties:
+ *               userId:
+ *                 type: string
+ *                 description: User's unique identifier
  *               username:
  *                 type: string
+ *                 description: New username
+ *           example:
+ *             userId: "65f1a1234567890abcdef123"
+ *             username: "newusername"
  *     responses:
  *       200:
  *         description: Profile updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 user:
+ *                   type: object
+ *             example:
+ *               message: "Profile updated successfully"
+ *               user: 
+ *                 _id: "65f1a1234567890abcdef123"
+ *                 username: "newusername"
  *       400:
- *         description: Bad request
- *       401:
- *         description: Unauthorized
+ *         description: Bad request - Missing required fields
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *             example:
+ *               error: "userId and username are required."
+ *       404:
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *             example:
+ *               error: "User not found"
  *       500:
- *         description: Server error
+ *         description: Internal server error
  */
 router.put('/update-profile', async (req, res) => {
     const { userId, username } = req.body;

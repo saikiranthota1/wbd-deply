@@ -3,6 +3,18 @@ const router = express.Router();
 const Startup = require('../../models/startupmodel');
 const redisClient = require('../../config/redis');
 
+// Global cache expiry time (1 hour in seconds)
+const CACHE_EXPIRY_TIME = 5;
+
+// Initialize Redis connection
+(async () => {
+    try {
+        await redisClient.client.connect();
+    } catch (error) {
+        console.error('Redis connection error:', error);
+    }
+})();
+
 /**
  * @swagger
  * /get/startups:
@@ -34,22 +46,30 @@ const redisClient = require('../../config/redis');
  */
 router.get('/startups', async (req, res) => {
     try {
-        // Try to get data from Redis cache first
+        if (!redisClient.client.isReady) {
+            throw new Error('Redis client not ready');
+        }
+
         const cachedStartups = await redisClient.get('all_startups');
         if (cachedStartups) {
+            console.log('[Redis] Cache HIT for all startups');
             return res.status(200).json(cachedStartups);
         }
 
-        // If not in cache, fetch from database
+        console.log('[Redis] Cache MISS for all startups');
         const startups = await Startup.find();
-        
-        // Cache the data for 1 hour
-        await redisClient.set('all_startups', startups, 3600);
-        
+        await redisClient.set('all_startups', startups, CACHE_EXPIRY_TIME);
         res.status(200).json(startups);
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: 'Server Error' });
+        console.error('Startups fetch error:', err);
+        // Fallback to database if Redis fails
+        try {
+            const startups = await Startup.find();
+            res.status(200).json(startups);
+        } catch (dbErr) {
+            console.error(dbErr);
+            res.status(500).json({ message: 'Server Error' });
+        }
     }
 });
 
@@ -137,27 +157,49 @@ router.get('/startups', async (req, res) => {
  */
 router.get('/startup/:id', async (req, res) => {
     try {
+        // Check if Redis client is ready to accept commands
+        if (!redisClient.client.isReady) {
+            throw new Error('Redis client not ready');
+        }
+
         const startupId = req.params.id;
+        console.log(`[Redis] Attempting to fetch startup ${startupId} from cache`);
         
-        // Try to get data from Redis cache first
+        // Try to get startup data from Redis cache
         const cachedStartup = await redisClient.get(`startup:${startupId}`);
+        
+        // Cache HIT: Return cached data if found
         if (cachedStartup) {
+            console.log(`[Redis] Cache HIT for startup ${startupId}`);
             return res.status(200).json(cachedStartup);
         }
 
-        // If not in cache, fetch from database
+        console.log(`[Redis] Cache MISS for startup ${startupId}`);
+        // Cache MISS: Fetch from database
         const startup = await Startup.findById(startupId);
         if (!startup) {
+            console.log(`[DB] Startup ${startupId} not found in database`);
             return res.status(404).json({ message: 'Startup not found' });
         }
 
-        // Cache the data for 1 hour
-        await redisClient.set(`startup:${startupId}`, startup, 3600);
+        // Update cache with new data
+        console.log(`[Redis] Caching startup ${startupId} data with ${CACHE_EXPIRY_TIME}s expiry`);
+        await redisClient.set(`startup:${startupId}`, startup, CACHE_EXPIRY_TIME);
         
         res.status(200).json(startup);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error' });
+        console.error('Startup fetch error:', error);
+        // Fallback to database if Redis fails
+        try {
+            const startup = await Startup.findById(req.params.id);
+            if (!startup) {
+                return res.status(404).json({ message: 'Startup not found' });
+            }
+            res.status(200).json(startup);
+        } catch (dbErr) {
+            console.error(dbErr);
+            res.status(500).json({ message: 'Server error' });
+        }
     }
 });
 
@@ -177,15 +219,27 @@ router.post('/clear-cache', async (req, res) => {
 
 router.get('/messages/:id', async (req, res) => {
     try {
-      // Fetch all startups and only the required fields
-      const messages = await Messages.findOne({startup_id: req.params.id});
-      // Format the data for the response
-      // Send the formatted data
-      res.status(200).send(messages);
+        const messageId = req.params.id;
+        
+        // Try to get messages from cache first
+        const cachedMessages = await redisClient.get(`messages:${messageId}`);
+        if (cachedMessages) {
+            console.log(`[Redis] Cache HIT for messages ${messageId}`);
+            return res.status(200).json(cachedMessages);
+        }
+
+        console.log(`[Redis] Cache MISS for messages ${messageId}`);
+        const messages = await Messages.findOne({startup_id: messageId});
+        
+        // Cache messages for 15 minutes since they update frequently
+        console.log(`[Redis] Caching messages ${messageId} with ${CACHE_EXPIRY_TIME}s expiry`);
+        await redisClient.set(`messages:${messageId}`, messages, CACHE_EXPIRY_TIME);
+        
+        res.status(200).json(messages);
     } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: 'Server Error' });
+        console.error('Messages fetch error:', err);
+        res.status(500).json({ message: 'Server Error' });
     }
-  });
+});
 
 module.exports = router;

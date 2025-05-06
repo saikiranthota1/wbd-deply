@@ -25,7 +25,7 @@ app.use(express.json());
 
 // Configure CORS
 const corsOptions = {
-  origin: ['https://wbd-deply.vercel.app', 'http://localhost:3000', 'https://wbd-deply-8kc9.vercel.app'],
+  origin: ['https://wbd-deply.vercel.app', 'http://localhost:3000', 'https://wbd-deply-8kc9.vercel.app', 'https://wbd-deply-8kc9-k2xvz5jyl-saikiranthota1s-projects.vercel.app'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
