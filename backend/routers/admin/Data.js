@@ -67,16 +67,73 @@ router.get('/startups', async (req, res) => {
  *         required: true
  *         schema:
  *           type: string
- *         description: Startup ID
+ *         description: The unique ID of the startup
  *     responses:
  *       200:
  *         description: Startup details retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 _id:
+ *                   type: string
+ *                 kyc:
+ *                   type: object
+ *                 progress:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                 reports:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                 messages:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                 grants:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *             examples:
+ *               success:
+ *                 summary: Example startup
+ *                 value:
+ *                   _id: 65f1a1234567890abcdef123
+ *                   kyc: { company_name: "Acme Corp", address: "123 Main St" }
+ *                   progress: []
+ *                   reports: []
+ *                   messages: []
+ *                   grants: []
  *       404:
  *         description: Startup not found
- *       401:
- *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *             examples:
+ *               notFound:
+ *                 summary: Startup not found example
+ *                 value:
+ *                   message: Startup not found
  *       500:
  *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *             examples:
+ *               serverError:
+ *                 summary: Server error example
+ *                 value:
+ *                   message: Server error
  */
 router.get('/startup/:id', async (req, res) => {
     try {

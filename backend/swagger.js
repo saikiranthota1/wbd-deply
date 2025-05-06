@@ -10,7 +10,7 @@ const options = {
     },
     servers: [
       {
-        url: 'https://wbd-deply-8kc9.vercel.app/' || 'http://localhost:4000',
+        url:  'http://localhost:4000',
         description: 'Development server',
       },
     ],
