@@ -11,8 +11,10 @@ const options = {
     },
     servers: [
       {
-        url:  'https://wbd-deply-8kc9-k2xvz5jyl-saikiranthota1s-projects.vercel.app' || 'http://localhost:4000',
-        description: 'Development server',
+        url: process.env.VERCEL_URL 
+          ? `https://${process.env.VERCEL_URL}`
+          : 'http://localhost:4000',
+        description: process.env.VERCEL_URL ? 'Production server' : 'Development server',
       },
     ],
     components: {
@@ -30,7 +32,17 @@ const options = {
 
 const specs = swaggerJsdoc(options);
 
+const swaggerConfig = {
+  swaggerOptions: {
+    persistAuthorization: true,
+  },
+  customCssUrl: '/swagger-ui.css',
+  customJs: '/swagger-ui-bundle.js',
+  customfavIcon: '/favicon-32x32.png'
+};
+
 module.exports = {
   specs,
-  swaggerUi
+  swaggerUi,
+  swaggerConfig
 };

@@ -11,16 +11,30 @@ const messageModel = require('./models/adminmessages');
 const startupModel = require("./models/startupmodel");
 const Messages = require('./models/adminmessages');
 const path = require('path');
-const swaggerUi = require('swagger-ui-express');
-const swaggerSpecs = require('./swagger.js');
+const { specs, swaggerUi, swaggerConfig } = require('./swagger');
 const session = require('express-session');
 const RedisStore = require('connect-redis').default;
 const redisClient = require('./config/redis');
 
 dotenv.config();
 
+app.use('/api-docs', express.static(path.join(__dirname, 'node_modules/swagger-ui-dist/')));
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
+// Setup Swagger UI
+app.use(
+  '/api-docs',
+  swaggerUi.serve,
+  swaggerUi.setup(specs, swaggerConfig)
+);
+
+// Add CORS headers for Swagger UI
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
+});
+
 app.use(express.json());
 
 // Configure CORS
