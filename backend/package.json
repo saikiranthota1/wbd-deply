@@ -30,7 +30,7 @@
     "sheetdb-node": "^0.0.12",
     "socket.io": "^4.8.0",
     "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.0"
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "jest": "^29.7.0",
